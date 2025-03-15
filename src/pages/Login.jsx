@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Import axios
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -8,23 +9,24 @@ const Login = () => {
   const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
 
+  const BASE_URL = "http://localhost:3000/user";
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
-   const BASE_URL = "https://short-url-2qqj.onrender.com"
+
     try {
-      const response = await fetch(`${BASE_URL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await axios.post(
+        `${BASE_URL}/login`,
+        { email, password },
+        { headers: { "Content-Type": "application/json" }, withCredentials: true }
+      );
 
-      if (!response.ok) throw new Error("Invalid email or password");
-
-      navigate("/"); // Redirect to Home on success
+      if (response.status === 200) {
+        navigate("/"); // Redirect to Home on success
+      }
     } catch (error) {
-      setError(error.message);
+      setError(error.response?.data?.message || "Invalid email or password");
     }
   };
 

@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Import axios
 
 const Signup = () => {
-  const [name, setName] = useState(""); // New state for name
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [darkMode, setDarkMode] = useState(false);
   const navigate = useNavigate();
+
+  const BASE_URL = "http://localhost:3000/user";
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -18,20 +21,19 @@ const Signup = () => {
       setError("Passwords do not match");
       return;
     }
-    const BASE_URL = "https://short-url-2qqj.onrender.com/"
+
     try {
-      const response = await fetch(`${BASE_URL}/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ name, email, password }),
-      });
+      const response = await axios.post(
+        `${BASE_URL}/signup`,
+        { name, email, password },
+        { headers: { "Content-Type": "application/json" }, withCredentials: true }
+      );
 
-      if (!response.ok) throw new Error("Signup failed. Try again.");
-
-      navigate("/login"); // Redirect to Login on success
+      if (response.status === 201) {
+        navigate("/login"); // Redirect to Login on success
+      }
     } catch (error) {
-      setError(error.message);
+      setError(error.response?.data?.message || "Signup failed. Try again.");
     }
   };
 
