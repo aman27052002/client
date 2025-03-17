@@ -1,6 +1,6 @@
 import axios from "axios";
 import QRCode from "qrcode"; // Import QR Code library
-
+import {useState} from "react"
 const Home = () => {
   const [inputUrl, setInputUrl] = useState("");
   const [shortId, setShortId] = useState(null);
@@ -8,9 +8,8 @@ const Home = () => {
   const [darkMode, setDarkMode] = useState(true);
   const [copied, setCopied] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState(null);
-  const navigate = useNavigate();
 
-  const BASE_URL = "http://localhost:3000";
+  const BASE_URL = "https://short-url-2qqj.onrender.com";
 
 
   const handleSubmit = async (e) => {
