@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import QRCode from "qrcode"; // Import QR Code library
 
@@ -14,17 +12,6 @@ const Home = () => {
 
   const BASE_URL = "http://localhost:3000";
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}`, { withCredentials: true });
-        if (response.status !== 200) throw new Error();
-      } catch (error) {
-        navigate("/login");
-      }
-    };
-    checkAuth();
-  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
